@@ -1,13 +1,19 @@
 bubblewrap 0.11.1
 =================
 
-Released: not yet
+Released: 2026-03-21
 
 Bug fixes:
 
   * Reset disposition of `SIGCHLD`, restoring normal subprocess management
     if bwrap was run from a process that was ignoring that signal,
     such as Erlang or volumeicon (#705, Joel Pelaez Jorge)
+
+  * Don't ignore `--userns 0`, `--userns2 0` or `--pidns 0` if used
+    (#731, Daniel Cazares).
+    Note that using a fd number ≥ 3 for these purposes is still
+    preferred, to avoid confusion with the stdin, stdout, stderr
+    that will be inherited by the command inside the container.
 
   * Fix grammar in an error message (#694, J. Neuschäfer)
 
@@ -17,6 +23,8 @@ Internal changes:
 
   * Enable user namespaces in Github Actions configuration, fixing a CI
     regression with newer Ubuntu (#728, Joel Pelaez Jorge)
+
+  * Clarify comments (#737, Simon McVittie)
 
 bubblewrap 0.11.0
 =================
