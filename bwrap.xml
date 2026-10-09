@@ -42,7 +42,7 @@
 
 <refsect1><title>Description</title>
 <para>
-  <command>bwrap</command> is a unprivileged low-level sandboxing tool. You
+  <command>bwrap</command> is an unprivileged low-level sandboxing tool. You
   are unlikely to use it directly from the commandline, although that is possible.
 </para>
 <para>
@@ -72,6 +72,10 @@
   <para>
     When options are used multiple times, the last option wins, unless otherwise
     specified.
+  </para>
+  <para>
+    An empty string is not a valid path, so options that take a path
+    reject it with an error.
   </para>
   <para>General options:</para>
   <variablelist>
@@ -613,6 +617,38 @@
         options are processed in the order they are specified on the
         command line.  Please be careful to the order they are specified.
       </para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--not-a-security-boundary</option></term>
+      <listitem>
+        <para>
+          Declare that this invocation of <command>bwrap</command>
+          is not intended to create a security boundary
+          between the sandbox and the host system.
+          When this option is given,
+          certain non-fatal sandbox setup failures
+          (such as a subdirectory remount failing
+          because an automounter did not respond in time)
+          will produce a warning and will be skipped,
+          rather than causing <command>bwrap</command> to exit with an error.
+          In future releases of bubblewrap
+          the effect of this option might be extended
+          to make other sandbox setup operations non-fatal
+        </para>
+        <para>
+          This option is intended for callers
+          such as <application>xdg-dbus-proxy</application> or Steam
+          that use <command>bwrap</command>
+          to adjust the filesystem layout for a process,
+          but do not rely on it to create a security boundary.
+        </para>
+        <para>
+          Other operations that are fundamental to establishing the sandbox
+          (creating namespaces, <function>pivot_root</function>,
+          dropping capabilities)
+          will still cause a hard failure regardless of this option.
+        </para>
+      </listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
